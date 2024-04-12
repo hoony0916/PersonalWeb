@@ -39,7 +39,7 @@
 
   <script>
     // The value below is injected by flutter build, do not touch.
-    const serviceWorkerVersion = "3268796830";
+    const serviceWorkerVersion = "4107753247";
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
@@ -47,14 +47,9 @@
 </head>
 <body>
   <script type="module">
-  // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   const firebaseConfig = {
     apiKey: "AIzaSyDw7iXg_2D2N7BbkMMjJ5s5sEK7gp5KRAo",
     authDomain: "bubbly-machine-419117.firebaseapp.com",
@@ -64,10 +59,24 @@
     appId: "1:345814055591:web:c13971d2b7acccb5c2f982",
     measurementId: "G-XE9FN6GYYW"
   };
-
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
+
+  // App 실행을 Flutter Engine과 웹 페이지들이 완전히 로딩 될 때 까지 지연시키는 부분으로 보이지만,
+  // 정확한 용도를 확인할 수 없음. 일반적으로 웹 로딩에 시간이 걸리는 것을 Progress Bar를 표시해서
+  // 지겹지 않게 해 주는 용도로 사용하는 것 같음. (2024.04.12)
+  window.addEventListener('load', function(ev) {
+    _flutter.loader.loadEntrypoint({
+      serviceWorker: {
+        serviceWorkerVersion: serviceWorkerVersion,
+      },
+      onEntrypointLoaded: function(engineInitializer) {
+        engineInitializer.initializeEngine().then(function(appRunner) {
+          appRunner.runApp();
+        });
+      }
+    });
+  });
   </script>
 </body>
 </html>
